@@ -1,19 +1,21 @@
-include patient.py
-include organ.py
+import patient
+import organ
 import random
 #import numpy
 from random import randrange
+from organ import Organ
+from patient import Patient
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 100 #number of patients to generate
+NUM_PATIENTS = 2 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
 LIFETIME_STDDEV = 365*2 #std dev on lifespan ^
 DATE_RANGE = 365 #upper bound on dates to discover needing organ
 
-#called by matching algorithm, prints various stats about that algorithm.
+# called by matching algorithm, prints various stats about that algorithm.
 def analyze(dead, matched, name):
     deadCount = dead.size
     matchCount = matched.size
@@ -96,27 +98,36 @@ def generate():
 
         kidney = False
         left = False
-        donorKidney = True
-        donorLeft = True
+        organToGiveIsKidney = True
+        organToGiveIsLeft = True
 
         lifetime = randrange(300) #random.normal(LIFETIME_AVG, LIFETIME_STDDEV)
         date = randrange(DATE_RANGE)
 
-        faulty = Organ.init(kidney, left, True)
-        donor = Organ.init(donorKidney, donorLeft, False)
+        faultyOrgan = Organ(kidney, left, True)
+        print("faulty")
+        faultyOrgan.give_features()
+        donorOrgan = Organ(organToGiveIsKidney, organToGiveIsLeft, False)
+        print("donor")
+        donorOrgan.give_features()
 
-        #initialize each patient.
-        patient.init(self, date, lifetime, faulty, donor, i, False, False)
+        patient = Patient(date, lifetime, faultyOrgan, donorOrgan, i, False, False)
+        print("patient")
+        patient.give_features() # don't know if organ ones work
         patients.append(patient)
 
+    # print(patients)
     return patients
+
+
 
 #generates patients, then runs each match.
 def main():
-    date = 0
-
+    # date = 0
     patients = generate()
+    print(patients)
 
+    """
     toMatch = []
     toDiscover = []
     for patient in patients:
@@ -128,6 +139,7 @@ def main():
     pairedMatch(toMatch, toDiscover)
     #ttc(toMatch, toDiscover)
     #nft(toMatch, toDiscover)
+    """
 
 if __name__ == "__main__":
     main()

@@ -8,3 +8,6 @@ class Organ:
         self.kidney = kidney
         self.left = left
         self.faulty = faulty
+
+    def give_features(self):
+        print("My features are ", self.kidney, self.left, self.faulty)
