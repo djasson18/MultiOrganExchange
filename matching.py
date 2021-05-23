@@ -69,6 +69,7 @@ def pairedMatch(toMatch, toDiscover):
                         matched.append(patient2)
 
         date += 1
+        analyze(dead, matched, "Free For All Match")
 
         return 0
 #our novel approach. Not yet implemented.
