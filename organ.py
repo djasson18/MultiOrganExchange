@@ -4,7 +4,7 @@
 # left lobe or right lobe (bool)
 
 class Organ:
-    def __init__(self, faulty, kidney, right):
+    def __init__(self, faulty, kidney, left):
         self.kidney = kidney
-        self.right = right
+        self.left = left
         self.faulty = faulty
