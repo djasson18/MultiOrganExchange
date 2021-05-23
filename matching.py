@@ -80,7 +80,7 @@ def nft(toMatch, toDiscover):
 #generates list of patients according to global parameters up top
 def generate():
     patients = []
-    sampleList = [true, false]
+    sampleList = [True, False]
 
     #create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
@@ -88,14 +88,14 @@ def generate():
         left = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
         donorKidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
         donorLeft = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
-        lifetime = random.normal(LIFETIME_AVG, LIFETIME_STDDEV)
-        date = randrange(DATE_RANGE)
+        lifetime = numpy.random.normal(LIFETIME_AVG, LIFETIME_STDDEV)
+        date = numpy.randrange(DATE_RANGE)
 
-        faulty = organ.init(kidney, left, true)
-        donor = organ.init(donorKidney, donorLeft, false)
+        faulty = organ.init(kidney, left, True)
+        donor = organ.init(donorKidney, donorLeft, False)
 
         #initialize each patient.
-        patient.init(self, date, lifetime, faulty, donor, i, false, false)
+        patient.init(self, date, lifetime, faulty, donor, i, False, False)
         patients.append(patient)
 
     return patients
