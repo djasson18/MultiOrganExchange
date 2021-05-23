@@ -18,4 +18,4 @@ class Patient:
         self.cured = cured
 
     def give_features(self):
-        print("My features are ", self.date, self.lifetime, self.faulty, self.donor, self.waitingList, self.token, self.cured)
+        print("My patient features are ", self.date, self.lifetime, self.faulty, self.donor, self.waitingList, self.token, self.cured)

@@ -10,4 +10,4 @@ class Organ:
         self.faulty = faulty
 
     def give_features(self):
-        print("My features are ", self.kidney, self.left, self.faulty)
+        print("My organ features are ", self.kidney, self.left, self.faulty)

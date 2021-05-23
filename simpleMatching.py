@@ -34,21 +34,24 @@ def analyze(dead, matched, name):
 
     return 0
 
-#top trading cycles. not yet implemented
+# top trading cycles. not yet implemented
 def ttc(toMatch, toDiscover):
     pass
     return 0
 
-#straightforward RSD-type match. Iterates through trying to find bilateral pairs.
-def pairedMatch(toMatch, toDiscover):
+# straightforward RSD-type match. Iterates through trying to find bilateral pairs.
+def pairedMatch(toDiscover):
+    # people that currently need kidney
+    toMatch = []
+    #
     dead = []
     matched = []
     date = 0
 
-    #daily update
+    # daily update
     while(toMatch.size != 0 and toDiscover.size != 0):
         for patient in toDiscover:
-            if patient.date >= date:
+            if patient.date <= date:
                 toMatch.append(patient)
                 toDiscover.remove(patient)
         for patient in toMatch:
@@ -56,7 +59,7 @@ def pairedMatch(toMatch, toDiscover):
                 dead.append(patient)
                 toMatch.remove(patient)
 
-        #cycle through pairs of patients trying to find matches
+        # cycle through pairs of patients trying to find matches
         for patient1 in toDiscover:
             for patient2 in toDiscover:
                 if patient1.faulty.kidney == patient2.donor.kidney and patient1.faulty.right == patient2.donor.right: #if 1 needs 2's kidney
@@ -76,44 +79,42 @@ def pairedMatch(toMatch, toDiscover):
 
         return 0
 
-#our novel approach. Not yet implemented.
+# our novel approach. Not yet implemented.
 def nft(toMatch, toDiscover):
     pass
     return 0
 
-#generates list of patients according to global parameters up top
+# generates list of patients according to global parameters up top
 def generate():
     patients = []
-    #sampleList = [true, false]
+    sampleList = [True, False]
 
-    #create patients according to distributions defined by parameters
+    # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
-
-        '''
         kidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
         left = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
-        donorKidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
-        donorLeft = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
-        '''
+        organToGiveIsKidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
+        organToGiveIsLeft = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
 
-        kidney = False
-        left = False
-        organToGiveIsKidney = True
-        organToGiveIsLeft = True
 
-        lifetime = randrange(300) #random.normal(LIFETIME_AVG, LIFETIME_STDDEV)
-        date = randrange(DATE_RANGE)
+        # kidney = False
+        # left = False
+        # organToGiveIsKidney = True
+        # organToGiveIsLeft = True
 
         faultyOrgan = Organ(kidney, left, True)
         print("faulty")
         faultyOrgan.give_features()
         donorOrgan = Organ(organToGiveIsKidney, organToGiveIsLeft, False)
         print("donor")
-        donorOrgan.give_features()
+        donorOrgan.give_features()  # randoms in parenthesis is bad?
+
+        lifetime = randrange(300)  # random.normal(LIFETIME_AVG, LIFETIME_STDDEV)
+        date = randrange(DATE_RANGE)
 
         patient = Patient(date, lifetime, faultyOrgan, donorOrgan, i, False, False)
         print("patient")
-        patient.give_features() # don't know if organ ones work
+        patient.give_features()  # don't know if organ ones work
         patients.append(patient)
 
     # print(patients)
@@ -121,25 +122,28 @@ def generate():
 
 
 
-#generates patients, then runs each match.
+# generates patients, then runs each match.
 def main():
     # date = 0
     patients = generate()
     print(patients)
-
     """
     toMatch = []
-    toDiscover = []
+    toDiscover = [] # generated people who don't need a kidney now but will later
     for patient in patients:
-        if patient.date >= date:
+        if patient.date <= date:
             toMatch.append(patient)
         else:
             toDiscover.append(patient)
-
-    pairedMatch(toMatch, toDiscover)
-    #ttc(toMatch, toDiscover)
-    #nft(toMatch, toDiscover)
+    print("toMatch: ")
+    print(toMatch)
+    print("toDiscover: ")
+    print(toDiscover)
     """
+    # pairedMatch(toMatch, toDiscover)
+    # ttc(toMatch, toDiscover)
+    # nft(toMatch, toDiscover)
+
 
 if __name__ == "__main__":
     main()
