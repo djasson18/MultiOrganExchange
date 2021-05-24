@@ -1,7 +1,7 @@
 import patient
 import organ
 import random
-import numpy as np
+#import numpy as np
 from random import randrange
 from organ import Organ
 from patient import Patient
@@ -14,6 +14,7 @@ CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
 LIFETIME_STDDEV = 365*2 #std dev on lifespan ^
 DATE_RANGE = 365 #upper bound on dates to discover needing organ
+NUM_TYPES = 20 # number of uniquely matchable types
 
 # called by matching algorithm, prints various stats about that algorithm.
 def analyze(dead, matched, name):
@@ -121,10 +122,29 @@ def unpaired_simple(toDiscover):
 # generates list of patients according to global parameters up top
 def generate():
     patients = []
+    donors = []
     sampleList = [True, False]
 
     # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
+        patientType = randrange(NUM_TYPES)
+        donorType = randrange(NUM_TYPES)
+        date = randrange(DATE_RANGE)
+        lifetime =  300 ## TODO: change this to randomize lifespan later
+
+        patient = Patient(date, lifetime, type, i, False)
+        donor = Donor(donorType, i)
+
+        patients.append(patient)
+        donors.append(donor)
+
+        print("patients:", patients)
+        print("donors:", donors)
+
+        pairs = tuple(zip(patients, donors))
+        return pairs
+
+        '''
         kidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
         left = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
         organToGiveIsKidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
@@ -151,17 +171,17 @@ def generate():
         patient.give_patient_features()  # don't know if organ ones work
         patients.append(patient)
 
-    # print(patients)
-    return patients
-
-
+        '''
 
 # generates patients, then runs each match.
 def main():
     # date = 0
     patients = generate()
     print(patients)
-    """
+    pairedMatch(patients)
+    ttc(patients)
+    nft(patients)
+    '''
     toMatch = []
     toDiscover = [] # generated people who don't need a kidney now but will later
     for patient in patients:
@@ -173,11 +193,11 @@ def main():
     print(toMatch)
     print("toDiscover: ")
     print(toDiscover)
-    """
+    
     # pairedMatch(toMatch, toDiscover)
     # ttc(toMatch, toDiscover)
     # nft(toMatch, toDiscover)
-
+    '''
 
 if __name__ == "__main__":
     main()
