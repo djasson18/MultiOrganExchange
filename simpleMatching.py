@@ -4,6 +4,7 @@ import random
 #import numpy as np
 from random import randrange
 from organ import Organ
+from donor import Donor
 from patient import Patient
 
 
@@ -50,7 +51,7 @@ def pairedMatch(toDiscover):
     date = 0
 
     # daily update
-    while(toMatch.size != 0 and toDiscover.size != 0):
+    while(toDiscover.size != 0):
         for patient in toDiscover:
             if patient.date <= date:
                 toMatch.append(patient)
@@ -141,7 +142,8 @@ def generate():
         print("patients:", patients)
         print("donors:", donors)
 
-        pairs = tuple(zip(patients, donors))
+        ## TODO:zip patients and donors into list of tuples
+        
         return pairs
 
         '''
@@ -193,7 +195,7 @@ def main():
     print(toMatch)
     print("toDiscover: ")
     print(toDiscover)
-    
+
     # pairedMatch(toMatch, toDiscover)
     # ttc(toMatch, toDiscover)
     # nft(toMatch, toDiscover)
