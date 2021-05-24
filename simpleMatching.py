@@ -1,10 +1,9 @@
 import patient
 import organ
 import random
-#import numpy
+import numpy as np
 from random import randrange
 from organ import Organ
-from donor import Donor
 from patient import Patient
 
 
@@ -15,7 +14,6 @@ CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
 LIFETIME_STDDEV = 365*2 #std dev on lifespan ^
 DATE_RANGE = 365 #upper bound on dates to discover needing organ
-NUM_TYPES = 20 # number of selff compatible organ types
 
 # called by matching algorithm, prints various stats about that algorithm.
 def analyze(dead, matched, name):
@@ -78,7 +76,7 @@ def pairedMatch(toDiscover):
 
         date += 1
         analyze(dead, matched, "Free For All Match")
-
+        #
         return 0
 
 # Akbarpour's single organ case
@@ -92,7 +90,6 @@ def unpaired_simple(toDiscover):
     for t in range(DATE_RANGE):
         while(toDiscover[pd_index][0].date == t):
             #try to find a donor for toDiscover[pd_index].patient in pending_donors
-            patient = toDiscover[pd_index].patient
             patient = toDiscover[pd_index][0]
             isPatientMatched = False
             for donor in pending_donors:
@@ -100,16 +97,13 @@ def unpaired_simple(toDiscover):
                     pending_donors.remove(donor)
                     isPatientMatched = True
                     matched.append((patient, donor))
-                    print("Log: " + patient.id + "matched with " donor.id)
                     print("Log: ", patient.id, " matched with ", donor.id)
             #if no match, add patient to pending_patients
-            if(!isPatientMatched):
             if(not isPatientMatched):
                 pending_patients.append(patient)
 
 
             #try to find a patient for toDiscover[pd_index].donor
-            donor = toDiscover[pd_index].donor
             donor = toDiscover[pd_index][1]
             isDonorMatched = False
             for patient in pending_patient:
@@ -117,10 +111,8 @@ def unpaired_simple(toDiscover):
                     pending_patients.remove(patient)
                     isDonorMatched = True
                     matched.append((patient, donor))
-                    print("Log: " + patient.id + "matched with " donor.id)
                     print("Log: ", patient.id, " matched with ", donor.id)
             #if no match, add patient to pending_patients
-            if(!isPatientMatched):
             if(not isPatientMatched):
                 pending_patients.append(patient)
 
@@ -138,12 +130,6 @@ def generate():
         organToGiveIsKidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
         organToGiveIsLeft = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
 
-        """
-        donorType = randrange(NUM_TYPES)
-        donor = Donor(type, i)
-        print("Donor")
-        Donor.give_donor_features()
-        """
 
         # kidney = False
         # left = False
