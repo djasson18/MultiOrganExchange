@@ -93,6 +93,7 @@ def unpaired_simple(toDiscover):
         while(toDiscover[pd_index][0].date == t):
             #try to find a donor for toDiscover[pd_index].patient in pending_donors
             patient = toDiscover[pd_index].patient
+            patient = toDiscover[pd_index][0]
             isPatientMatched = False
             for donor in pending_donors:
                 if donor.type == patient.type:
@@ -100,13 +101,16 @@ def unpaired_simple(toDiscover):
                     isPatientMatched = True
                     matched.append((patient, donor))
                     print("Log: " + patient.id + "matched with " donor.id)
+                    print("Log: ", patient.id, " matched with ", donor.id)
             #if no match, add patient to pending_patients
             if(!isPatientMatched):
+            if(not isPatientMatched):
                 pending_patients.append(patient)
 
 
             #try to find a patient for toDiscover[pd_index].donor
             donor = toDiscover[pd_index].donor
+            donor = toDiscover[pd_index][1]
             isDonorMatched = False
             for patient in pending_patient:
                 if donor.type == patient.type:
@@ -114,9 +118,13 @@ def unpaired_simple(toDiscover):
                     isDonorMatched = True
                     matched.append((patient, donor))
                     print("Log: " + patient.id + "matched with " donor.id)
+                    print("Log: ", patient.id, " matched with ", donor.id)
             #if no match, add patient to pending_patients
             if(!isPatientMatched):
+            if(not isPatientMatched):
                 pending_patients.append(patient)
+
+
 
 # generates list of patients according to global parameters up top
 def generate():
