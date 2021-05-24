@@ -7,7 +7,7 @@ from patient import Patient
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 100000 #number of patients to generate
+NUM_PATIENTS = 100 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
@@ -53,21 +53,21 @@ def pairedMatch(toDiscover):
     # daily update
     for t in range(DATE_RANGE):
         for pair in toDiscover:
-            if (pair.patient).date <= date:
+            if (pair[0]).date <= date:
                 toMatch.append(pair)
                 toDiscover.remove(pair)
         for pair in toMatch:
-            if (pair.patient).date + (pair.patient).age > date:
+            if (pair[0]).date + (pair[0]).lifetime < date:
                 dead.append(pair)
                 toMatch.remove(pair)
 
         # cycle through pairs of patients trying to find matches
         for pair1 in toDiscover:
             for pair2 in toDiscover:
-                if pair1.first.type == pair2.second.type: #if 1 needs 2's kidney
-                    if pair2.first.type == pair1.second.type: #if 2 needs 1's kidney
-                            pair1.first.cured = date - pair1.first.date
-                            pair2.first.cured = date - pair2.first.date
+                if pair1[0].type == pair2[1].type: #if 1 needs 2's kidney
+                    if pair2[0].type == pair1[1].type: #if 2 needs 1's kidney
+                            pair1[0].cured = date - pair1[0].date
+                            pair2[0].cured = date - pair2[0].date
                             toMatch.remove(pair1)
                             matched.append(pair1)
                             toMatch.remove(pair2)
@@ -75,7 +75,10 @@ def pairedMatch(toDiscover):
 
         date += 1
     dead.extend(toMatch)
-    analyze(dead, matched, "Free For All Paired Match")
+    #analyze(dead, matched, "Free For All Paired Match")
+    print("pairedMatch")
+    print(len(dead))
+    print(len(matched))
     return 0
 #Determines whether or not a patient and donor are compatible
 def isCompatible(patient, donor):
@@ -84,17 +87,17 @@ def isCompatible(patient, donor):
 
     # check if organs same
     if patient[0] != donor[0]:
-        return false
+        return False
 
     # check if organ types same, say odd and even must match
     if (patient[1])%2 != (donor[1])%2:
-        return false
+        return False
 
     # check if blood types match and each blood type is comparable with numbers lower than it
     if (patient[2] > donor[2]):
-        return false
+        return False
 
-    return true
+    return True
 
 
 
@@ -105,7 +108,8 @@ def unpaired_simple(toDiscover):
     pending_donors = []
     pending_patients = []
     matched = []
-
+    print("unpaired_simple")
+    print(len(toDiscover))
     print(toDiscover[pd_index])
     print(toDiscover[pd_index][0])
     print(toDiscover[pd_index][0].date)
@@ -116,7 +120,7 @@ def unpaired_simple(toDiscover):
             patient = toDiscover[pd_index][0]
             isPatientMatched = False
             for donor in pending_donors:
-                if donor.type == patient.type:
+                if isCompatible(patient, donor):
                     pending_donors.remove(donor)
                     isPatientMatched = True
                     matched.append((patient, donor))
@@ -130,7 +134,7 @@ def unpaired_simple(toDiscover):
             donor = toDiscover[pd_index][1]
             isDonorMatched = False
             for patient in pending_patients:
-                if donor.type == patient.type:
+                if isCompatible(patient, donor):
                     pending_patients.remove(patient)
                     isDonorMatched = True
                     matched.append((patient, donor))
@@ -140,10 +144,10 @@ def unpaired_simple(toDiscover):
                 pending_donors.append(donor)
 
             pd_index += 1
-            print(pd_index)
-    print(len(matched))
-    print(len(pending_patients))
-    print(len(pending_donors))
+            #print(pd_index)
+    #print(len(matched))
+    #print(len(pending_patients))
+    #print(len(pending_donors))
 
 
 # generates list of patients according to global parameters up top
@@ -176,9 +180,11 @@ def generate():
 def main():
     # date = 0
     toDiscover = generate()
+    toDiscover.sort(key = lambda x: x[0].date)
     #print(toDiscover)
-    #pairedMatch(patients)
+    pairedMatch(toDiscover)
     ttc(toDiscover)
+    print(toDiscover)
     unpaired_simple(toDiscover)
     '''
     toMatch = []
