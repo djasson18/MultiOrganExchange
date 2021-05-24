@@ -149,7 +149,7 @@ def unpaired_complex(toDiscover):
     print("unpaired_complex")
     print(len(matched))
     print(len(pending_patients))
-    print(len(pending_donors))
+
 
 
 # generates list of patients according to global parameters up top
