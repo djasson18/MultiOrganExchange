@@ -13,9 +13,9 @@ CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
 LIFETIME_STDDEV = 365*2 #std dev on lifespan ^
 DATE_RANGE = 365 #upper bound on dates to discover needing organ
-NUM_ORGANS = 8 # number of uniquely matchable organs
-ORGAN_TYPES = 2
-BLOOD_TYPES = 4
+NUM_ORGANS = 3 # number of uniquely matchable organs
+ORGAN_TYPES = 3 # number of compatability types within an organ class
+BLOOD_TYPES = 3 # number of blood types
 
 # called by matching algorithm, prints various stats about that algorithm.
 def analyze(dead, matched, name):
@@ -64,23 +64,23 @@ def pairedMatch(pdList):
                 toMatch.remove(pair)
 
         # cycle through pairs of patients trying to find matches
-        for pair1 in toDiscover:
-            for pair2 in toDiscover:
-                if pair1[0].type == pair2[1].type: #if 1 needs 2's kidney
-                    if pair2[0].type == pair1[1].type: #if 2 needs 1's kidney
-                            pair1[0].cured = date - pair1[0].date
-                            pair2[0].cured = date - pair2[0].date
-                            toMatch.remove(pair1)
-                            matched.append(pair1)
-                            toMatch.remove(pair2)
-                            matched.append(pair2)
+        for pair1 in toMatch:
+            for pair2 in toMatch:
+                if isCompatible(pair1[0], pair2[1]) and isCompatible(pair2[0], pair1[1]): #if 1 needs 2's kidney
+                    pair1[0].cured = date - pair1[0].date
+                    pair2[0].cured = date - pair2[0].date
+                    toMatch.remove(pair1)
+                    matched.append(pair1)
+                    toMatch.remove(pair2)
+                    matched.append(pair2)
 
         date += 1
+
     dead.extend(toMatch)
     #analyze(dead, matched, "Free For All Paired Match")
     print("pairedMatch")
-    print(len(dead))
-    print(len(matched))
+    print("dead:",len(dead))
+    print("matched:",len(matched))
     return 0
 #Determines whether or not a patient and donor are compatible
 def isCompatible(patient, donor):
@@ -92,7 +92,7 @@ def isCompatible(patient, donor):
         return False
 
     # check if organ types same, say odd and even must match
-    if (patient[1])%2 != (donor[1])%2:
+    if (int(patient[1]))%2 != (int(donor[1]))%2:
         return False
 
     # check if blood types match and each blood type is comparable with numbers lower than it
@@ -156,12 +156,12 @@ def generate():
     pairs = []
     # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
-        patientType = 100*randrange(NUM_ORGANS) + 10*randrange(ORGAN_TYPES) + randrange(BLOOD_TYPES)
-        donorType = 100*randrange(NUM_ORGANS) + 10*randrange(ORGAN_TYPES) + randrange(BLOOD_TYPES)
+        patientType = 100*randrange(1,NUM_ORGANS) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
+        donorType = 100*randrange(1,NUM_ORGANS) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
         date = randrange(DATE_RANGE)
         lifetime =  300 ## TODO: change this to randomize lifespan later
 
-        patient = Patient(date, lifetime, type, i, False)
+        patient = Patient(date, lifetime, patientType, i, False)
         donor = Donor(donorType, i)
 
         patients.append(patient)
@@ -177,10 +177,11 @@ def generate():
 # generates patients, then runs each match.
 def main():
     # date = 0
+
     toDiscover = generate()
     toDiscover.sort(key = lambda x: x[0].date)
     #print(toDiscover)
-    #pairedMatch(toDiscover)
+    pairedMatch(toDiscover)
     ttc(toDiscover)
     unpaired_complex(toDiscover)
     '''
