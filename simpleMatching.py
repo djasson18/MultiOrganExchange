@@ -21,12 +21,12 @@ BLOOD_TYPES = 4
 
 # called by matching algorithm, prints various stats about that algorithm.
 def analyze(dead, matched, name):
-    deadCount = dead.size
-    matchCount = matched.size
+    deadCount = len(dead)
+    matchCount = len(matched)
 
     matchTime = 0
     for patient in matched:
-        matchTime += patient.cured
+        matchTime += patient.first.cured
     matchTime /= matchCount
 
     print("Algorithm " + name)
@@ -53,35 +53,32 @@ def pairedMatch(toDiscover):
     date = 0
 
     # daily update
-    while(len(toDiscover) != 0):
-        for patient in toDiscover:
-            if patient.date <= date:
-                toMatch.append(patient)
-                toDiscover.remove(patient)
-        for patient in toMatch:
-            if patient.date + patient.age > date:
-                dead.append(patient)
-                toMatch.remove(patient)
+    for t in range(DATE_RANGE):
+        for pair in toDiscover:
+            if (pair.patient).date <= date:
+                toMatch.append(pair)
+                toDiscover.remove(pair)
+        for pair in toMatch:
+            if (pair.patient).date + (pair.patient).age > date:
+                dead.append(pair)
+                toMatch.remove(pair)
 
         # cycle through pairs of patients trying to find matches
-        for patient1 in toDiscover:
-            for patient2 in toDiscover:
-                if patient1.faulty.kidney == patient2.donor.kidney and patient1.faulty.right == patient2.donor.right: #if 1 needs 2's kidney
-                    if patient2.faulty.kidney == patient1.donor.kidney and patient2.faulty.right == patient1.donor.right: #if 2 needs 1's kidney
-                        patient1.faulty = patient2.donor
-                        patient2.faulty = patient1.donor
-
-                        patient1.cured = date - patient1.date
-                        patient2.cured = date - patient2.date
-                        toMatch.remove(patient1)
-                        matched.append(patient1)
-                        toMatch.remove(patient2)
-                        matched.append(patient2)
+        for pair1 in toDiscover:
+            for pair2 in toDiscover:
+                if pair1.first.type == pair2.second.type: #if 1 needs 2's kidney
+                    if pair2.first.type == pair1.second.type: #if 2 needs 1's kidney
+                            pair1.first.cured = date - pair1.first.date
+                            pair2.first.cured = date - pair2.first.date
+                            toMatch.remove(pair1)
+                            matched.append(pair1)
+                            toMatch.remove(pair2)
+                            matched.append(pair2)
 
         date += 1
-        analyze(dead, matched, "Free For All Match")
-        #
-        return 0
+    dead.extend(toMatch)
+    analyze(dead, matched, "Free For All Paired Match")
+    return 0
 #Determines whether or not a patient and donor are compatible
 def isCompatible(patient, donor):
     patient = str(patient.type)
