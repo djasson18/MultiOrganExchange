@@ -88,7 +88,7 @@ def unpaired_simple(toDiscover):
 
 
     for t in range(DATE_RANGE):
-        while(toDiscover[pd_index].date == t):
+        while(toDiscover[pd_index][0].date == t):
             #try to find a donor for toDiscover[pd_index].patient in pending_donors
             patient = toDiscover[pd_index].patient
             isPatientMatched = False
