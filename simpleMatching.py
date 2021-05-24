@@ -112,7 +112,7 @@ def unpaired_simple(toDiscover):
 
 
     for t in range(DATE_RANGE):
-        while(toDiscover[pd_index][0].date == t):
+        while(pd_index < len(toDiscover) and toDiscover[pd_index][0].date == t):
             #try to find a donor for toDiscover[pd_index].patient in pending_donors
             patient = toDiscover[pd_index][0]
             isPatientMatched = False
@@ -130,7 +130,7 @@ def unpaired_simple(toDiscover):
             #try to find a patient for toDiscover[pd_index].donor
             donor = toDiscover[pd_index][1]
             isDonorMatched = False
-            for patient in pending_patient:
+            for patient in pending_patients:
                 if donor.type == patient.type:
                     pending_patients.remove(patient)
                     isDonorMatched = True
@@ -139,6 +139,8 @@ def unpaired_simple(toDiscover):
             #if no match, add patient to pending_patients
             if(not isPatientMatched):
                 pending_patients.append(patient)
+
+            pd_index += 1
 
 
 
@@ -171,11 +173,11 @@ def generate():
 # generates patients, then runs each match.
 def main():
     # date = 0
-    patients = generate()
-    print(patients)
-    pairedMatch(patients)
-    ttc(patients)
-    nft(patients)
+    toDiscover = generate()
+    print(toDiscover)
+    #pairedMatch(patients)
+    ttc(toDiscover)
+    unpaired_simple(toDiscover)
     '''
     toMatch = []
     toDiscover = [] # generated people who don't need a kidney now but will later
