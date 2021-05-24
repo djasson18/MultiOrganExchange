@@ -81,7 +81,23 @@ def pairedMatch(toDiscover):
         return 0
 #Determines whether or not a patient and donor are compatible
 def isCompatible(patient, donor):
-    return 0
+    patient = str(patient.type)
+    donor = str(donor.type)
+
+    # check if organs same
+    if patient[0] != donor[0]:
+        return false
+
+    # check if organ types same, say odd and even must match
+    if (patient[1])%2 != (donor[1])%2:
+        return false
+
+    # check if blood types match and each blood type is comparable with numbers lower than it
+    if (patient[2] > donor[2]):
+        return false
+
+    return true
+
 
 
 # Akbarpour's single organ case
