@@ -9,7 +9,7 @@ from patient import Patient
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 2 #number of patients to generate
+NUM_PATIENTS = 100000 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
@@ -106,10 +106,14 @@ def unpaired_simple(toDiscover):
     pd_index = 0
     pending_donors = []
     pending_patients = []
+    matched = []
 
+    print(toDiscover[pd_index])
+    print(toDiscover[pd_index][0])
+    print(toDiscover[pd_index][0].date)
 
     for t in range(DATE_RANGE):
-        while(toDiscover[pd_index][0].date == t):
+        while(pd_index < len(toDiscover) and toDiscover[pd_index][0].date == t):
             #try to find a donor for toDiscover[pd_index].patient in pending_donors
             patient = toDiscover[pd_index][0]
             isPatientMatched = False
@@ -118,7 +122,7 @@ def unpaired_simple(toDiscover):
                     pending_donors.remove(donor)
                     isPatientMatched = True
                     matched.append((patient, donor))
-                    print("Log: ", patient.id, " matched with ", donor.id)
+                    #print("Log: ", patient.id, " matched with ", donor.id)
             #if no match, add patient to pending_patients
             if(not isPatientMatched):
                 pending_patients.append(patient)
@@ -127,16 +131,21 @@ def unpaired_simple(toDiscover):
             #try to find a patient for toDiscover[pd_index].donor
             donor = toDiscover[pd_index][1]
             isDonorMatched = False
-            for patient in pending_patient:
+            for patient in pending_patients:
                 if donor.type == patient.type:
                     pending_patients.remove(patient)
                     isDonorMatched = True
                     matched.append((patient, donor))
-                    print("Log: ", patient.id, " matched with ", donor.id)
+                    #print("Log: ", patient.id, " matched with ", donor.id)
             #if no match, add patient to pending_patients
-            if(not isPatientMatched):
-                pending_patients.append(patient)
+            if(not isDonorMatched):
+                pending_donors.append(donor)
 
+            pd_index += 1
+            print(pd_index)
+    print(len(matched))
+    print(len(pending_patients))
+    print(len(pending_donors))
 
 
 # generates list of patients according to global parameters up top
@@ -159,20 +168,20 @@ def generate():
         donors.append(donor)
         pairs.append((patient, donor))
 
-    print("patients:", patients)
-    print("donors:", donors)
-    print("pairs:", pairs)
+    #print("patients:", patients)
+    #print("donors:", donors)
+    #print("pairs:", pairs)
 
     return pairs
 
 # generates patients, then runs each match.
 def main():
     # date = 0
-    patients = generate()
-    print(patients)
-    pairedMatch(patients)
-    ttc(patients)
-    nft(patients)
+    toDiscover = generate()
+    #print(toDiscover)
+    #pairedMatch(patients)
+    ttc(toDiscover)
+    unpaired_simple(toDiscover)
     '''
     toMatch = []
     toDiscover = [] # generated people who don't need a kidney now but will later
