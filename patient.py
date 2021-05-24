@@ -12,10 +12,10 @@ class Patient:
         self.donor = donor
         # place on waiting list (int) [consistent across all patients]
         self.waitingList = waitingList
-        # bool
+        # int for token; 0: no debt; 1: owed organ; -1: owes organ
         self.token = token
         # cured date is time to be cured (int)
         self.cured = cured
 
-    def give_features(self):
+    def give_patient_features(self):
         print("My patient features are ", self.date, self.lifetime, self.faulty, self.donor, self.waitingList, self.token, self.cured)

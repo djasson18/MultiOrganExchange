@@ -35,7 +35,7 @@ def analyze(dead, matched, name):
     return 0
 
 # top trading cycles. not yet implemented
-def ttc(toMatch, toDiscover):
+def ttc(toDiscover):
     pass
     return 0
 
@@ -80,7 +80,7 @@ def pairedMatch(toDiscover):
         return 0
 
 # our novel approach. Not yet implemented.
-def nft(toMatch, toDiscover):
+def nft(toDiscover):
     pass
     return 0
 
@@ -104,17 +104,17 @@ def generate():
 
         faultyOrgan = Organ(kidney, left, True)
         print("faulty")
-        faultyOrgan.give_features()
+        faultyOrgan.give_organ_features()
         donorOrgan = Organ(organToGiveIsKidney, organToGiveIsLeft, False)
         print("donor")
-        donorOrgan.give_features()  # randoms in parenthesis is bad?
+        donorOrgan.give_organ_features()  # randoms in parenthesis is bad?
 
         lifetime = randrange(300)  # random.normal(LIFETIME_AVG, LIFETIME_STDDEV)
         date = randrange(DATE_RANGE)
 
-        patient = Patient(date, lifetime, faultyOrgan, donorOrgan, i, False, False)
+        patient = Patient(date, lifetime, faultyOrgan, donorOrgan, i, 0, False)
         print("patient")
-        patient.give_features()  # don't know if organ ones work
+        patient.give_patient_features()  # don't know if organ ones work
         patients.append(patient)
 
     # print(patients)
