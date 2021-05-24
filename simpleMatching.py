@@ -1,9 +1,7 @@
 import patient
-import organ
 import random
 #import numpy as np
 from random import randrange
-from organ import Organ
 from donor import Donor
 from patient import Patient
 
