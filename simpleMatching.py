@@ -79,10 +79,42 @@ def pairedMatch(toDiscover):
 
         return 0
 
-# our novel approach. Not yet implemented.
-def nft(toDiscover):
-    pass
-    return 0
+# Akbarpour's single organ case
+# Parameters: toDiscover, a stack of tuples representing a patient donor pair (p,d)
+def unpaired_simple(toDiscover):
+    pd_index = 0
+    pending_donors = []
+    pending_patients = []
+
+
+    for t in range(DATE_RANGE):
+        while(toDiscover[pd_index].date == t):
+            #try to find a donor for toDiscover[pd_index].patient in pending_donors
+            patient = toDiscover[pd_index].patient
+            isPatientMatched = False
+            for donor in pending_donors:
+                if donor.type == patient.type:
+                    pending_donors.remove(donor)
+                    isPatientMatched = True
+                    matched.append((patient, donor))
+                    print("Log: " + patient.id + "matched with " donor.id)
+            #if no match, add patient to pending_patients
+            if(!isPatientMatched):
+                pending_patients.append(patient)
+
+
+            #try to find a patient for toDiscover[pd_index].donor
+            donor = toDiscover[pd_index].donor
+            isDonorMatched = False
+            for patient in pending_patient:
+                if donor.type == patient.type:
+                    pending_patients.remove(patient)
+                    isDonorMatched = True
+                    matched.append((patient, donor))
+                    print("Log: " + patient.id + "matched with " donor.id)
+            #if no match, add patient to pending_patients
+            if(!isPatientMatched):
+                pending_patients.append(patient)
 
 # generates list of patients according to global parameters up top
 def generate():
