@@ -66,7 +66,7 @@ def pairedMatch(pdList):
         # cycle through pairs of patients trying to find matches
         for pair1 in toMatch:
             for pair2 in toMatch:
-                if isCompatible(pair1[0], pair2[1]) and isCompatible(pair2[0], pair1[1]): #if 1 needs 2's kidney
+                if isCompatible(pair1[0], pair2[1]) and isCompatible(pair2[0], pair1[1]) and pair1 != pair2: #if 1 needs 2's kidney
                     pair1[0].cured = date - pair1[0].date
                     pair2[0].cured = date - pair2[0].date
                     toMatch.remove(pair1)
