@@ -1,5 +1,4 @@
 class Donor:
-
     def __init__(self, type, id):
         # type of organ (int)
 	       self.type = type
