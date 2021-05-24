@@ -185,7 +185,7 @@ def main():
     toDiscover = generate()
     toDiscover.sort(key = lambda x: x[0].date)
     #print(toDiscover)
-    #pairedMatch(toDiscover)
+    pairedMatch(toDiscover)
     ttc(toDiscover)
     unpaired_complex(toDiscover)
     '''
