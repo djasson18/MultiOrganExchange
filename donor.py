@@ -6,4 +6,4 @@ class Donor:
        self.id = id
 
     def give_donor_features(self):
-        print("My donor features are Type:”, self.type, “ID:“, self.id)
+        print("My donor features are Type:", self.type, "ID:", self.id)

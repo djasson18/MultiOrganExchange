@@ -4,6 +4,7 @@ import random
 #import numpy as np
 from random import randrange
 from organ import Organ
+from donor import Donor
 from patient import Patient
 
 
@@ -50,7 +51,7 @@ def pairedMatch(toDiscover):
     date = 0
 
     # daily update
-    while(toMatch.size != 0 and toDiscover.size != 0):
+    while(len(toDiscover) != 0):
         for patient in toDiscover:
             if patient.date <= date:
                 toMatch.append(patient)
@@ -144,7 +145,7 @@ def generate():
     patients = []
     donors = []
     sampleList = [True, False]
-
+    pairs = []
     # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
         patientType = randrange(NUM_TYPES)
@@ -157,41 +158,42 @@ def generate():
 
         patients.append(patient)
         donors.append(donor)
+        pairs.append((patient, donor))
 
-        print("patients:", patients)
-        print("donors:", donors)
+    print("patients:", patients)
+    print("donors:", donors)
+    print("pairs:", pairs)
 
-        pairs = tuple(zip(patients, donors))
-        return pairs
+    return pairs
 
-        '''
-        kidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
-        left = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
-        organToGiveIsKidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
-        organToGiveIsLeft = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
+    '''
+    kidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
+    left = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
+    organToGiveIsKidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
+    organToGiveIsLeft = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
 
 
-        # kidney = False
-        # left = False
-        # organToGiveIsKidney = True
-        # organToGiveIsLeft = True
+    # kidney = False
+    # left = False
+    # organToGiveIsKidney = True
+    # organToGiveIsLeft = True
 
-        faultyOrgan = Organ(kidney, left, True)
-        print("faulty")
-        faultyOrgan.give_organ_features()
-        donorOrgan = Organ(organToGiveIsKidney, organToGiveIsLeft, False)
-        print("donor")
-        donorOrgan.give_organ_features()  # randoms in parenthesis is bad?
+    faultyOrgan = Organ(kidney, left, True)
+    print("faulty")
+    faultyOrgan.give_organ_features()
+    donorOrgan = Organ(organToGiveIsKidney, organToGiveIsLeft, False)
+    print("donor")
+    donorOrgan.give_organ_features()  # randoms in parenthesis is bad?
 
-        lifetime = randrange(300)  # random.normal(LIFETIME_AVG, LIFETIME_STDDEV)
-        date = randrange(DATE_RANGE)
+    lifetime = randrange(300)  # random.normal(LIFETIME_AVG, LIFETIME_STDDEV)
+    date = randrange(DATE_RANGE)
 
-        patient = Patient(date, lifetime, faultyOrgan, donorOrgan, i, 0, False)
-        print("patient")
-        patient.give_patient_features()  # don't know if organ ones work
-        patients.append(patient)
+    patient = Patient(date, lifetime, faultyOrgan, donorOrgan, i, 0, False)
+    print("patient")
+    patient.give_patient_features()  # don't know if organ ones work
+    patients.append(patient)
 
-        '''
+    '''
 
 # generates patients, then runs each match.
 def main():
