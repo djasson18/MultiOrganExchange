@@ -121,6 +121,7 @@ def unpaired_complex(toDiscover):
                     pending_donors.remove(donor)
                     isPatientMatched = True
                     matched.append((patient, donor))
+                    break
                     #print("Log: ", patient.id, " matched with ", donor.id)
             #if no match, add patient to pending_patients
             if(not isPatientMatched):
@@ -135,6 +136,7 @@ def unpaired_complex(toDiscover):
                     pending_patients.remove(patient)
                     isDonorMatched = True
                     matched.append((patient, donor))
+                    break
                     #print("Log: ", patient.id, " matched with ", donor.id)
             #if no match, add patient to pending_patients
             if(not isDonorMatched):
@@ -144,8 +146,8 @@ def unpaired_complex(toDiscover):
             #print(pd_index)
     print("unpaired_complex")
     print(len(matched))
-    #print(len(pending_patients))
-    #print(len(pending_donors))
+    print(len(pending_patients))
+    print(len(pending_donors))
 
 
 # generates list of patients according to global parameters up top
