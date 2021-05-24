@@ -78,10 +78,11 @@ def pairedMatch(pdList):
         date += 1
 
     dead.extend(toMatch)
-    #analyze(dead, matched, "Free For All Paired Match")
-    print("pairedMatch")
-    print("dead:",len(dead))
-    print("matched:",len(matched))
+    # analyze(dead, matched, "Free For All Paired Match")
+    print("Paired Match: ")
+    print("# dead:",len(dead))
+    print("# matched:",len(matched))
+    print("---------------")
     return 0
 #Determines whether or not a patient and donor are compatible
 def isCompatible(patient, donor):
