@@ -4,6 +4,7 @@ import random
 from random import randrange
 from donor import Donor
 from patient import Patient
+from collections import deque
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
@@ -38,7 +39,42 @@ def analyze(dead, matched, name):
 
 # top trading cycles. not yet implemented
 def ttc(toDiscover):
-    pass
+    q = []
+    pd_index = 0
+
+    # create queue with patients
+    for t in range(DATE_RANGE):
+        while (pd_index < len(toDiscover) and toDiscover[pd_index][0].date == t):
+            patient = toDiscover[pd_index][0]
+            q.append((patient, pd_index))
+            pd_index += 1
+    # for each patient in queue
+    for index, p in q:
+        patient = p[0]
+        currDonor = toDiscover[p[1]][1]
+        if patient.visited or isCompatible(patient, currDonor):
+            continue
+        patient.visited = True
+        donorIndex
+        donor
+        # find a donor match
+        for i, tuple in enumerate(toDiscover):
+            donor = tuple[1]
+            if isCompatible(patient, donor):
+                donorIndex = i
+                break
+        # if donor is paired with unvisited patient j
+        donorPatient = toDiscover[donorIndex][0]
+        if not donorPatient.visited:
+            # move j before i in queue
+            q.append(donorPatient)
+        # else if donor is paired with visited patient j
+        else:
+            # patient's partner to become donor
+            toDiscover[p[1]][1] = donor
+            # donorPatient partner to become currDonor
+            toDiscover[donorIndex][1] = currDonor
+
     return 0
 
 # straightforward RSD-type match. Iterates through trying to find bilateral pairs.
@@ -84,7 +120,7 @@ def pairedMatch(pdList):
     print("# matched:",len(matched))
     print("---------------")
     return 0
-#Determines whether or not a patient and donor are compatible
+# Determines whether or not a patient and donor are compatible
 def isCompatible(patient, donor):
     patient = str(patient.type)
     donor = str(donor.type)
@@ -165,7 +201,7 @@ def generate():
         date = randrange(DATE_RANGE)
         lifetime =  300 ## TODO: change this to randomize lifespan later
 
-        patient = Patient(date, lifetime, patientType, i, False)
+        patient = Patient(date, lifetime, patientType, i, False, False)
         donor = Donor(donorType, i)
 
         patients.append(patient)
