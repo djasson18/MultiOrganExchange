@@ -79,6 +79,10 @@ def pairedMatch(toDiscover):
         analyze(dead, matched, "Free For All Match")
         #
         return 0
+#Determines whether or not a patient and donor are compatible
+def isCompatible(patient, donor):
+    return 0
+
 
 # Akbarpour's single organ case
 # Parameters: toDiscover, a stack of tuples representing a patient donor pair (p,d)
@@ -193,7 +197,7 @@ def main():
     print(toMatch)
     print("toDiscover: ")
     print(toDiscover)
-    
+
     # pairedMatch(toMatch, toDiscover)
     # ttc(toMatch, toDiscover)
     # nft(toMatch, toDiscover)
