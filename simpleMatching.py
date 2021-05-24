@@ -42,8 +42,10 @@ def ttc(toDiscover):
     return 0
 
 # straightforward RSD-type match. Iterates through trying to find bilateral pairs.
-def pairedMatch(toDiscover):
+def pairedMatch(pdList):
     # people that currently need kidney
+    toDiscover = []
+    toDiscover.extend(pdList)
     toMatch = []
     #
     dead = []
@@ -101,18 +103,13 @@ def isCompatible(patient, donor):
 
 
 
-# Akbarpour's single organ case
+# unpaired_complex
 # Parameters: toDiscover, a stack of tuples representing a patient donor pair (p,d)
-def unpaired_simple(toDiscover):
+def unpaired_complex(toDiscover):
     pd_index = 0
     pending_donors = []
     pending_patients = []
     matched = []
-    print("unpaired_simple")
-    print(len(toDiscover))
-    print(toDiscover[pd_index])
-    print(toDiscover[pd_index][0])
-    print(toDiscover[pd_index][0].date)
 
     for t in range(DATE_RANGE):
         while(pd_index < len(toDiscover) and toDiscover[pd_index][0].date == t):
@@ -145,7 +142,8 @@ def unpaired_simple(toDiscover):
 
             pd_index += 1
             #print(pd_index)
-    #print(len(matched))
+    print("unpaired_complex")
+    print(len(matched))
     #print(len(pending_patients))
     #print(len(pending_donors))
 
@@ -182,10 +180,9 @@ def main():
     toDiscover = generate()
     toDiscover.sort(key = lambda x: x[0].date)
     #print(toDiscover)
-    pairedMatch(toDiscover)
+    #pairedMatch(toDiscover)
     ttc(toDiscover)
-    print(toDiscover)
-    unpaired_simple(toDiscover)
+    unpaired_complex(toDiscover)
     '''
     toMatch = []
     toDiscover = [] # generated people who don't need a kidney now but will later
