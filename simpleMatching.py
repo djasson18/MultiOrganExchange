@@ -15,7 +15,9 @@ CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
 LIFETIME_STDDEV = 365*2 #std dev on lifespan ^
 DATE_RANGE = 365 #upper bound on dates to discover needing organ
-NUM_TYPES = 20 # number of uniquely matchable types
+NUM_ORGANS = 8 # number of uniquely matchable organs
+ORGAN_TYPES = 2
+BLOOD_TYPES = 4
 
 # called by matching algorithm, prints various stats about that algorithm.
 def analyze(dead, matched, name):
@@ -148,8 +150,8 @@ def generate():
     pairs = []
     # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
-        patientType = randrange(NUM_TYPES)
-        donorType = randrange(NUM_TYPES)
+        patientType = 100*randrange(NUM_ORGANS) + 10*randrange(ORGAN_TYPES) + randrange(BLOOD_TYPES)
+        donorType = 100*randrange(NUM_ORGANS) + 10*randrange(ORGAN_TYPES) + randrange(BLOOD_TYPES)
         date = randrange(DATE_RANGE)
         lifetime =  300 ## TODO: change this to randomize lifespan later
 
@@ -165,35 +167,6 @@ def generate():
     print("pairs:", pairs)
 
     return pairs
-
-    '''
-    kidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
-    left = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
-    organToGiveIsKidney = random.choices(sampleList, weights = (CHANCE_KIDNEY, 1-CHANCE_KIDNEY))
-    organToGiveIsLeft = random.choices(sampleList, weights = (CHANCE_LEFT, 1-CHANCE_LEFT))
-
-
-    # kidney = False
-    # left = False
-    # organToGiveIsKidney = True
-    # organToGiveIsLeft = True
-
-    faultyOrgan = Organ(kidney, left, True)
-    print("faulty")
-    faultyOrgan.give_organ_features()
-    donorOrgan = Organ(organToGiveIsKidney, organToGiveIsLeft, False)
-    print("donor")
-    donorOrgan.give_organ_features()  # randoms in parenthesis is bad?
-
-    lifetime = randrange(300)  # random.normal(LIFETIME_AVG, LIFETIME_STDDEV)
-    date = randrange(DATE_RANGE)
-
-    patient = Patient(date, lifetime, faultyOrgan, donorOrgan, i, 0, False)
-    print("patient")
-    patient.give_patient_features()  # don't know if organ ones work
-    patients.append(patient)
-
-    '''
 
 # generates patients, then runs each match.
 def main():
