@@ -2,13 +2,14 @@ import patient
 import random
 #import numpy as np
 from random import randrange
+import numpy as np
 from donor import Donor
 from patient import Patient
 from collections import deque
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 40000 #number of patients to generate
+NUM_PATIENTS = 400 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
@@ -243,9 +244,18 @@ def generate():
     # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
         #numpy random choice and manually assign mass values
-        patientType = np.random.choice(organClasses, 1, classProbabilities)
+        organ_class = np.random.choice(organClasses, 1, classProbabilities)
+        difficulty_type = np.random.choice(difficultyType, 1, difficultyProbabilities)
+        blood_type = np.random.choice(blood_types, 1, typeProbabilities)
 
-        donorType = 100*randrange(1,NUM_ORGANS) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
+        donorType = organ_class + difficulty_type + blood_type
+
+        organ_class = np.random.choice(organClasses, 1, classProbabilities)
+        difficulty_type = np.random.choice(difficultyType, 1, difficultyProbabilities)
+        blood_type = np.random.choice(blood_types, 1, typeProbabilities)
+
+        patientType = organ_class + difficulty_type + blood_type
+
         date = randrange(DATE_RANGE)
         lifetime =  300 ## TODO: change this to randomize lifespan later
 
