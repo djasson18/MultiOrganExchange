@@ -253,7 +253,7 @@ def generate():
 # generates patients, then runs each match.
 def main():
     # date = 0
-
+    print("Running matches: ")
     toDiscover = generate()
     toDiscover.sort(key = lambda x: x[0].date)
     # print(toDiscover)
