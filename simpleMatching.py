@@ -15,8 +15,8 @@ LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed orga
 LIFETIME_STDDEV = 365*2 #std dev on lifespan ^
 DATE_RANGE = 365 #upper bound on dates to discover needing organ
 NUM_ORGANS = 3 # number of uniquely matchable organs
-ORGAN_TYPES = 3 # number of compatability types within an organ class
-BLOOD_TYPES = 3 # number of blood types
+ORGAN_TYPES = 4 # number of compatability types within an organ class
+BLOOD_TYPES = 4 # number of blood types
 
 # called by matching algorithm, prints various stats about that algorithm.
 def analyze(dead, matched, name):
@@ -102,8 +102,9 @@ def ttc(toDiscover):
         date += 1
 
     print("TTC: ")
-    print("# dead:", NUM_PATIENTS - matched)
-    print("# matched", matched)
+    print("dead:", NUM_PATIENTS - matched)
+    print("matched", matched)
+    print("---------------")
 
     return 0
 
@@ -148,8 +149,8 @@ def pairedMatch(pdList):
     dead.extend(toMatch)
     # analyze(dead, matched, "Free For All Paired Match")
     print("Paired Match: ")
-    print("# dead:",len(dead))
-    print("# matched:",len(matched))
+    print("dead:",len(dead))
+    print("matched:",len(matched))
     print("---------------")
     return 0
 # Determines whether or not a patient and donor are compatible
@@ -214,9 +215,11 @@ def unpaired_complex(toDiscover):
 
             pd_index += 1
             #print(pd_index)
-    print("unpaired_complex")
-    print(len(matched))
-    print(len(pending_patients))
+    print("Unpaired Complex: ")
+    print("Unmatched:",len(pending_patients))
+    print("Matched:", len(matched))
+    print("---------------")
+
 
 
 
