@@ -8,7 +8,7 @@ from collections import deque
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 10000 #number of patients to generate
+NUM_PATIENTS = 100 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
@@ -38,42 +38,72 @@ def analyze(dead, matched, name):
     return 0
 
 # top trading cycles. not yet implemented
+# toDiscover now: {x, y} {a, b}
+# toDiscover want: {x, b} {a, y}
 def ttc(toDiscover):
     q = []
-    pd_index = 0
+    dead = []
+    patients = []
+    donors = []
+    currIndex = 0
+    date = 0
+    matched = 0
 
-    # create queue with patients
     for t in range(DATE_RANGE):
-        while (pd_index < len(toDiscover) and toDiscover[pd_index][0].date == t):
-            patient = toDiscover[pd_index][0]
-            q.append((patient, pd_index))
-            pd_index += 1
-    # for each patient in queue
-    for index, p in q:
-        patient = p[0]
-        currDonor = toDiscover[p[1]][1]
-        if patient.visited or isCompatible(patient, currDonor):
-            continue
-        patient.visited = True
-        donorIndex
-        donor
-        # find a donor match
-        for i, tuple in enumerate(toDiscover):
-            donor = tuple[1]
-            if isCompatible(patient, donor):
-                donorIndex = i
+        for pair in toDiscover:
+            # print(pair)
+            # if currIndex == 0:
+                # currIndex += 1
+                # continue
+            # print(currIndex)
+            # print((pair[0], currIndex))
+            q.append((pair[0], currIndex))
+            # print(q)
+            patients.append(pair[0])
+            donors.append(pair[1])
+            currIndex += 1
+
+        for currP in patients:
+            if currP.date + currP.lifetime < date:
+                dead.append(currP)
+                patients.remove(currP)
+
+        # for each patient in queue
+        # print(q)
+        for pair in q:
+            if type(pair) is not tuple:
                 break
-        # if donor is paired with unvisited patient j
-        donorPatient = toDiscover[donorIndex][0]
-        if not donorPatient.visited:
-            # move j before i in queue
-            q.append(donorPatient)
-        # else if donor is paired with visited patient j
-        else:
-            # patient's partner to become donor
-            toDiscover[p[1]][1] = donor
-            # donorPatient partner to become currDonor
-            toDiscover[donorIndex][1] = currDonor
+            # print(pair)
+            p = pair[0]
+            currDonor = donors[(pair[1] -1)]
+            if p.visited or isCompatible(p, currDonor):
+                continue
+            p.visited = True
+            donorIndex = 0
+            donor = Donor(113, 0)
+            # find a donor match
+            for d in donors:
+                if isCompatible(pair[0], d):
+                    donor = d
+                    break
+                donorIndex += 1
+            # if donor is paired with unvisited patient j
+            donorPatient = patients[donorIndex]
+            if not donorPatient.visited:
+                # move j before i in queue
+                q.append(donorPatient)
+            # else if donor is paired with visited patient j
+            else:
+                # patient's partner to become donor
+                donors[(pair[1] -1)] = donor
+                matched += 1
+                # donorPatient partner to become currDonor
+                donors[donorIndex] = donors[(pair[1] -1)]
+        date += 1
+
+    print("TTC: ")
+    print("# dead:", NUM_PATIENTS - matched)
+    print("# matched", matched)
 
     return 0
 
@@ -105,8 +135,10 @@ def pairedMatch(pdList):
                 if isCompatible(pair1[0], pair2[1]) and isCompatible(pair2[0], pair1[1]): #if 1 needs 2's kidney
                     pair1[0].cured = date - pair1[0].date
                     pair2[0].cured = date - pair2[0].date
-                    toMatch.remove(pair1)
-                    matched.append(pair1)
+                    if pair1 in toMatch:
+                        toMatch.remove(pair1)
+                    if pair1 not in matched:
+                        matched.append(pair1)
                     if pair1 != pair2:
                         toMatch.remove(pair2)
                         matched.append(pair2)
@@ -122,19 +154,19 @@ def pairedMatch(pdList):
     return 0
 # Determines whether or not a patient and donor are compatible
 def isCompatible(patient, donor):
-    patient = str(patient.type)
-    donor = str(donor.type)
+    patientString = str(patient.type)
+    donorString = str(donor.type)
 
     # check if organs same
-    if patient[0] != donor[0]:
+    if patientString[0] != donorString[0]:
         return False
 
     # check if organ types same, say odd and even must match
-    if (int(patient[1]))%2 != (int(donor[1]))%2:
+    if (int(patientString[1])) != (int(donorString[1])): # took out %2
         return False
 
     # check if blood types match and each blood type is comparable with numbers lower than it
-    if (patient[2] > donor[2]):
+    if (patientString[2] > donorString[2]):
         return False
 
     return True
@@ -196,6 +228,7 @@ def generate():
     pairs = []
     # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
+        #numpy random choice and manually assign mass values
         patientType = 100*randrange(1,NUM_ORGANS) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
         donorType = 100*randrange(1,NUM_ORGANS) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
         date = randrange(DATE_RANGE)
@@ -220,7 +253,7 @@ def main():
 
     toDiscover = generate()
     toDiscover.sort(key = lambda x: x[0].date)
-    #print(toDiscover)
+    # print(toDiscover)
     pairedMatch(toDiscover)
     ttc(toDiscover)
     unpaired_complex(toDiscover)
