@@ -8,13 +8,13 @@ from collections import deque
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 100 #number of patients to generate
+NUM_PATIENTS = 40000 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
 LIFETIME_STDDEV = 365*2 #std dev on lifespan ^
 DATE_RANGE = 365 #upper bound on dates to discover needing organ
-NUM_ORGANS = 3 # number of uniquely matchable organs
+NUM_ORGANS = 6 # number of uniquely matchable organs
 ORGAN_TYPES = 4 # number of compatability types within an organ class
 BLOOD_TYPES = 4 # number of blood types
 
