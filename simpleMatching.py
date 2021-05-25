@@ -14,8 +14,8 @@ CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
 LIFETIME_STDDEV = 365*2 #std dev on lifespan ^
 DATE_RANGE = 365 #upper bound on dates to discover needing organ
-NUM_ORGANS = 6 # number of uniquely matchable organs
-ORGAN_TYPES = 4 # number of compatability types within an organ class
+NUM_ORGANS = 3 # number of uniquely matchable organs
+ORGAN_TYPES = 3 # number of compatability types within an organ class
 BLOOD_TYPES = 4 # number of blood types
 
 # called by matching algorithm, prints various stats about that algorithm.
@@ -225,6 +225,17 @@ def unpaired_complex(toDiscover):
 
 # generates list of patients according to global parameters up top
 def generate():
+    organClasses = [100,200,300]
+    classProbabilities = [.78, .11, .11]
+    difficultyType = [1,2]
+    difficultyProbabilities = [.60, .40]
+    blood_types = [1,2,3,4]
+    #A, B, AB, 0
+    typeProbabilities = [.4, .11, .04,.45]
+
+
+
+
     patients = []
     donors = []
     sampleList = [True, False]
@@ -232,7 +243,8 @@ def generate():
     # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
         #numpy random choice and manually assign mass values
-        patientType = 100*randrange(1,NUM_ORGANS) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
+        patientType = np.random.choice(organClasses, 1, classProbabilities)
+
         donorType = 100*randrange(1,NUM_ORGANS) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
         date = randrange(DATE_RANGE)
         lifetime =  300 ## TODO: change this to randomize lifespan later
