@@ -13,7 +13,7 @@ blood_probs = [.34, .06, .09, .02, .03, .01, .38, .07]
 no_ABP = ["A+", "A-","B+", "B-", "AB-", "O+", "O-"]
 no_ABP_probs = [.34, .06, .09, .02, .01, .38, .07]/np.sum([.34, .06, .09, .02, .01, .38, .07]) #Bayesian adjustment
 
-#Three Places
+#Three Places dont know if this is the best spot for them
 negative = []
 positive = []
 pairs = []
