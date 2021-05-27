@@ -229,10 +229,12 @@ def generate():
     donors = []
     sampleList = [True, False]
     pairs = []
+    blood_probs = [.40,.11,.04,.45]
+    organProbs = [.78, .11, .11]
     # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
         #numpy random choice and manually assign mass values
-        patientType = 100*randrange(1,NUM_ORGANS) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
+        patientType = 100*np.random.choice(a = organs, size = 1, replace = True, p = organProbs) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
         donorType = 100*randrange(1,NUM_ORGANS) + 10*randrange(1,ORGAN_TYPES) + randrange(1,BLOOD_TYPES)
         date = randrange(DATE_RANGE)
         lifetime =  300 ## TODO: change this to randomize lifespan later
