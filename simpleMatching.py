@@ -1,10 +1,11 @@
 import patient
 import random
-#import numpy as np
+import numpy as np
 from random import randrange
 from donor import Donor
 from patient import Patient
 from collections import deque
+import time
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
@@ -47,6 +48,9 @@ def analyze(dead, matched, name):
 # toDiscover now: {x, y} {a, b}
 # toDiscover want: {x, b} {a, y}
 def ttc(toDiscover):
+    print("Entering TTC...")
+    startTime = time.time()
+
     q = []
     dead = []
     patients = []
@@ -108,6 +112,7 @@ def ttc(toDiscover):
         date += 1
 
     print("TTC: ")
+    print("Time Elapsed", startTime - time.time())
     print("dead:", NUM_PATIENTS - matched)
     print("matched", matched)
     print("---------------")
@@ -116,6 +121,8 @@ def ttc(toDiscover):
 
 # straightforward RSD-type match. Iterates through trying to find bilateral pairs.
 def pairedMatch(pdList):
+    print("Entering Paired Match...")
+    startTime = time.time()
     # people that currently need kidney
     toDiscover = []
     toDiscover.extend(pdList)
@@ -155,6 +162,7 @@ def pairedMatch(pdList):
     dead.extend(toMatch)
     # analyze(dead, matched, "Free For All Paired Match")
     print("Paired Match: ")
+    print("Elapsed Time:", startTime - time.time())
     print("dead:",len(dead))
     print("matched:",len(matched))
     print("---------------")
@@ -242,6 +250,7 @@ def generate():
     pairs = []
     blood_probs = [.40,.11,.04,.45]
     organProbs = [.78, .11, .11]
+    organs = [1,2,3]
     # create patients according to distributions defined by parameters
     for i in range(NUM_PATIENTS):
         #numpy random choice and manually assign mass values
@@ -271,7 +280,7 @@ def main():
     toDiscover.sort(key = lambda x: x[0].date)
     # print(toDiscover)
     pairedMatch(toDiscover)
-    ttc(toDiscover)
+    #ttc(toDiscover)
     unpaired_complex(toDiscover)
     '''
     toMatch = []
