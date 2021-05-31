@@ -18,6 +18,12 @@ NUM_ORGANS = 3 # number of uniquely matchable organs
 ORGAN_TYPES = 4 # number of compatability types within an organ class
 BLOOD_TYPES = 4 # number of blood types
 
+#This is for tissue-type compatability
+EXTREME_PROB = .2 + .15 #probs for testing 0,100% PRA scores
+UNI_PROB = 1 - EXTREME_PROB
+PRA_PROBS = []
+PRA = []
+
 # called by matching algorithm, prints various stats about that algorithm.
 def analyze(dead, matched, name):
     deadCount = len(dead)
@@ -221,7 +227,13 @@ def unpaired_complex(toDiscover):
     print("---------------")
 
 
+#Run this only at the beginning
+def create_HLA_distribution():
+  PRA = [i for i in range(1,100)]
+  PRA.append(0); PRA.append(100) #bimodal values
 
+  PRA_PROBS = [UNI_PROB/99 for i in range(1,100)] #uniform probs from PRA: 1-99
+  PRA_PROBS.append(.2); PRA_PROBS.append(.15) #bimodal probs
 
 # generates list of patients according to global parameters up top
 def generate():
