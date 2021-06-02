@@ -19,7 +19,7 @@ NUM_ORGANS = 3 # number of uniquely matchable organs
 ORGAN_TYPES = 4 # number of compatability types within an organ class
 BLOOD_TYPES = 4 # number of blood types
 
-#This is for tissue-type compatability
+#This is for crossmatch compatability
 ZERO_PROB, HUN_PROB = .2, .15
 UNI_PROB = 1 - ZERO_PROB + HUN_PROB
 PRA_PROBS = []
@@ -239,7 +239,7 @@ def unpaired_complex(toDiscover):
 
 
 #Run this only at the beginning
-def create_HLA_distribution():
+def create_PRA_distribution():
   PRA = [i for i in range(1,100)]
   PRA.append(0); PRA.append(100) #bimodal values
 
