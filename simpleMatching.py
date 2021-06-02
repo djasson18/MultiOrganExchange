@@ -9,7 +9,7 @@ import time
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 100 #number of patients to generate
+NUM_PATIENTS = 1000 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
@@ -112,7 +112,7 @@ def ttc(toDiscover):
         date += 1
 
     print("TTC: ")
-    print("Time Elapsed", startTime - time.time())
+    print("Time Elapsed", (time.time() - startTime)/60)
     print("dead:", NUM_PATIENTS - matched)
     print("matched", matched)
     print("---------------")
@@ -162,7 +162,7 @@ def pairedMatch(pdList):
     dead.extend(toMatch)
     # analyze(dead, matched, "Free For All Paired Match")
     print("Paired Match: ")
-    print("Elapsed Time:", startTime - time.time())
+    print("Elapsed Time:", (time.time() - startTime)/60)
     print("dead:",len(dead))
     print("matched:",len(matched))
     print("---------------")
@@ -191,6 +191,7 @@ def isCompatible(patient, donor):
 # unpaired_complex
 # Parameters: toDiscover, a stack of tuples representing a patient donor pair (p,d)
 def unpaired_complex(toDiscover):
+    startTime = time.time()
     pd_index = 0
     pending_donors = []
     pending_patients = []
@@ -229,6 +230,7 @@ def unpaired_complex(toDiscover):
             pd_index += 1
             #print(pd_index)
     print("Unpaired Complex: ")
+    print("Elapsed Time:", (time.time() - startTime)/60)
     print("Unmatched:",len(pending_patients))
     print("Matched:", len(matched))
     print("---------------")
