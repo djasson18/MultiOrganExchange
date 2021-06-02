@@ -9,7 +9,7 @@ import time
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 5000 #number of patients to generate
+NUM_PATIENTS = 45000 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
@@ -117,18 +117,13 @@ def ttc(toDiscover):
 					donors[donorIndex] = donors[(pair[1] -1)]
 		date += 1
 
-		unmatched = [ ]
-		for i in range(len(patients)):
-			if not isCompatible(patients[i], donors[i]):
-				unmatched.append((patients[i], donors[i]))
-
 	print("TTC: ")
 	print("Time Elapsed", (time.time() - startTime)/60)
 	print("matched", matched)
 	print("unmatched:", NUM_PATIENTS - matched)
 	print("---------------")
 
-	return unmatched
+	return 
 
 # straightforward RSD-type match. Iterates through trying to find bilateral pairs.
 def pairedMatch(pdList):
@@ -309,11 +304,10 @@ def main():
 	toDiscover.sort(key = lambda x: x[0].date)
 	# print(toDiscover)
 	#pairedMatch(toDiscover)
-	unmatched = ttc(toDiscover)
+	ttc(toDiscover)
 	unpaired_complex(toDiscover)
 
-	print("Allowing exchange by unmatched:")
-	unpaired_complex(unmatched)
+
 
 	'''
 	toMatch = []
