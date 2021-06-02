@@ -117,13 +117,18 @@ def ttc(toDiscover):
 					donors[donorIndex] = donors[(pair[1] -1)]
 		date += 1
 
+		unmatched = [ ]
+		for i in range(len(patients)):
+			if not isCompatible(patients[i], donors[i]):
+				unmatched.append((patients[i], donors[i]))
+
 	print("TTC: ")
 	print("Time Elapsed", (time.time() - startTime)/60)
 	print("matched", matched)
 	print("unmatched:", NUM_PATIENTS - matched)
 	print("---------------")
 
-	return 0
+	return unmatched
 
 # straightforward RSD-type match. Iterates through trying to find bilateral pairs.
 def pairedMatch(pdList):
@@ -203,6 +208,7 @@ def HLACompatability(patient, donor):
 # unpaired_complex
 # Parameters: toDiscover, a stack of tuples representing a patient donor pair (p,d)
 def unpaired_complex(toDiscover):
+	print(len(toDiscover))
 	startTime = time.time()
 	pd_index = 0
 	pending_donors = []
@@ -303,8 +309,12 @@ def main():
 	toDiscover.sort(key = lambda x: x[0].date)
 	# print(toDiscover)
 	#pairedMatch(toDiscover)
-	ttc(toDiscover)
+	unmatched = ttc(toDiscover)
 	unpaired_complex(toDiscover)
+
+	print("Allowing exchange by unmatched:")
+	unpaired_complex(unmatched)
+
 	'''
 	toMatch = []
 	toDiscover = [] # generated people who don't need a kidney now but will later
