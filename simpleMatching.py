@@ -9,7 +9,7 @@ import time
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 10000 #number of patients to generate
+NUM_PATIENTS = 5000 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
@@ -145,10 +145,6 @@ def pairedMatch(pdList):
 				toMatch.append(pair)
 				toDiscover.remove(pair)
 
-		#for pair in toMatch:
-		#	if (pair[0]).date + (pair[0]).lifetime < date:
-		#		dead.append(pair)
-		#		toMatch.remove(pair)
 
 		# cycle through pairs of patients trying to find matches
 		for pair1 in toMatch:
@@ -176,11 +172,11 @@ def pairedMatch(pdList):
 	return 0
 # Determines whether or not a patient and donor are compatible
 def isCompatible(patient, donor):
-	if(patient.organClass == "Kidney"):
+	if(patient.organClass == "Kidney" and donor.organClass == "Kidney"):
 		return bloodTypeCompatability(patient, donor) and HLACompatability(patient, donor)
-	if(patient.organClass == "Livers"):
+	if(patient.organClass == "Livers" and patient.organClass == "Livers"):
 		return bloodTypeCompatability(patient, donor)
-	if(patient.organClass == "Marrow"):
+	if(patient.organClass == "Marrow" and patient.organClass == "Marrow"):
 		return bloodTypeCompatability(patient, donor) and HLACompatability(patient, donor)
 
 def bloodTypeCompatability(patient, donor):
