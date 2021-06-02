@@ -1,9 +1,9 @@
 class Donor:
-    def __init__(self, type, id):
-        # type of organ (int)
-       self.type = type
-	    # unique id matchable with associated patient
-       self.id = id
-
-    def give_donor_features(self):
-        print("My donor features are Type:", self.type, "ID:", self.id)
+	def __init__(self, organClass, bloodType, praScore, id):
+		# type of organ (int)
+		self.organClass = organClass
+		self.bloodType = bloodType
+		# unique id matchable with associated patient
+		self.id = id
+		self.praScore = praScore
+		self.bloodType = bloodType

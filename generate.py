@@ -66,14 +66,14 @@ def is_compatible(donor, patient):
 
 def match():
   #First check for pair donating (they wouldn't be here if they could)
-
+  return
 
   #Run through debtors first
 
 def main():
   #for year in range(YEARS):
   inflow()
-
+  return
   #match();
 
 

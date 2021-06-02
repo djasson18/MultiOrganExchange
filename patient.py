@@ -1,17 +1,20 @@
-# don't know if organ is being imported properly
+#patient.py
 
 class Patient:
-    def __init__(self, date, lifetime, type, waitingList, cured, visited):
+    def __init__(self, date, organClass, bloodType, praScore, visited):
         # date where kidney requirement for kidney starts (int)
         self.date = date
         # lifetime without transplant (int)
-        self.lifetime = lifetime
+        self.dateMatched = -1
         # int
-        self.type = type
-        # place on waiting list (int) [consistent across all patients]
-        self.waitingList = waitingList
-        # cured date is time to be cured (int)
-        self.cured = cured
+        self.organClass = organClass
+
+
+        self.bloodType = bloodType
+
+        self.praScore = praScore
+
+
         # boolean to implement TTC
         self.visited = visited
 
