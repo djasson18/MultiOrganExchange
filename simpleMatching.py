@@ -98,6 +98,8 @@ def ttc(toDiscover):
                     break
                 donorIndex += 1
             # if donor is paired with unvisited patient j
+            if(donorIndex == len(patients)):
+                donorIndex = donorIndex - 1
             donorPatient = patients[donorIndex]
             if not donorPatient.visited:
                 # move j before i in queue
