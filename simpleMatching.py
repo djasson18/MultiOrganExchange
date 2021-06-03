@@ -53,7 +53,7 @@ def analyze(dead, matched, name):
 def ttc(toDiscover):
 	print("Entering TTC...")
 	startTime = time.time()
-
+	matched = []
 	q = []
 	dead = []
 	patients = []
@@ -123,7 +123,7 @@ def ttc(toDiscover):
 	print("unmatched:", NUM_PATIENTS - matched)
 	print("---------------")
 
-	return 
+	return
 
 # straightforward RSD-type match. Iterates through trying to find bilateral pairs.
 def pairedMatch(pdList):
@@ -309,22 +309,7 @@ def main():
 
 
 
-	'''
-	toMatch = []
-	toDiscover = [] # generated people who don't need a kidney now but will later
-	for patient in patients:
-		if patient.date <= date:
-			toMatch.append(patient)
-		else:
-			toDiscover.append(patient)
-	print("toMatch: ")
-	print(toMatch)
-	print("toDiscover: ")
-	print(toDiscover)
-	# pairedMatch(toMatch, toDiscover)
-	# ttc(toMatch, toDiscover)
-	# nft(toMatch, toDiscover)
-	'''
+
 
 if __name__ == "__main__":
 	main()
