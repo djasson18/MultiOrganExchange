@@ -6,10 +6,10 @@ from donor import Donor
 from patient import Patient
 from collections import deque
 import time
-
+import matplotlib.pyplot as plt
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 450 #number of patients to generate
+NUM_PATIENTS = 1000 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
@@ -50,7 +50,7 @@ def analyze(dead, matched, name):
 # top trading cycles. not yet implemented
 # toDiscover now: {x, y} {a, b}
 # toDiscover want: {x, b} {a, y}
-def ttc(toDiscover):
+def ttc(toDiscover, mode):
 	print("Entering TTC...")
 	startTime = time.time()
 	matched = []
@@ -61,6 +61,15 @@ def ttc(toDiscover):
 	currIndex = 0
 	date = 0
 	matched = 0
+	kidney = 0
+	liver  = 0
+	bonemarrow = 0
+	cumulative_matches = []
+	date_matches = []
+	cumulative_livers = []
+	cumulative_bonemarrow = []
+	cumulative_kidney = []
+	sum = 0
 
 	for t in range(DATE_RANGE):
 		if t % 60 == 0:
@@ -76,7 +85,7 @@ def ttc(toDiscover):
 				patients.append(pair[0])
 				donors.append(pair[1])
 				currIndex += 1
-
+			print(len(donors))
 			#for currP in patients:
 			#	if currP.date + currP.lifetime < date:
 			#		dead.append(currP)
@@ -115,12 +124,27 @@ def ttc(toDiscover):
 					matched += 1
 					# donorPatient partner to become currDonor
 					donors[donorIndex] = donors[(pair[1] -1)]
-		date += 1
+			cumulative_matches.append(matched)
+			date_matches.append(t)
 
-	print("TTC: ")
+
+	plt.figure(num=0, dpi=120)
+	plt.plot()
+	plt.title(("TTC", mode))
+	plt.plot(date_matches, cumulative_matches, label="All Organs")
+	#plt.plot(date_matches, cumulative_kidney, label="Kidneys")
+	#plt.plot(date_matches, cumulative_livers, label="Livers")
+	#plt.plot(date_matches, cumulative_bonemarrow, label="Bone Marrow")
+	plt.xlabel("Date")
+	plt.ylabel("Cumulative Matches")
+	plt.legend()
+	plt.show()
+
+	print("TTC: ", mode)
 	print("Time Elapsed", (time.time() - startTime)/60)
-	print("matched", matched)
 	print("unmatched:", NUM_PATIENTS - matched)
+	print("matched", matched)
+
 	print("---------------")
 
 	return
@@ -174,7 +198,7 @@ def pairedMatch(pdList):
 def isCompatible(patient, donor):
 	if(patient.organClass == "Kidney" and donor.organClass == "Kidney"):
 		return bloodTypeCompatability(patient, donor) and HLACompatability(patient, donor)
-	if(patient.organClass == "Livers" and patient.organClass == "Livers"):
+	if(patient.organClass == "Liver" and patient.organClass == "Liver"):
 		return bloodTypeCompatability(patient, donor)
 	if(patient.organClass == "Marrow" and patient.organClass == "Marrow"):
 		return bloodTypeCompatability(patient, donor) and HLACompatability(patient, donor)
@@ -202,13 +226,23 @@ def HLACompatability(patient, donor):
 
 # unpaired_complex
 # Parameters: toDiscover, a stack of tuples representing a patient donor pair (p,d)
-def unpaired_complex(toDiscover):
+def unpaired_complex(toDiscover, mode):
 	print(len(toDiscover))
 	startTime = time.time()
 	pd_index = 0
 	pending_donors = []
 	pending_patients = []
 	matched = []
+	matches = 0
+	kidney = 0
+	liver  = 0
+	bonemarrow = 0
+	cumulative_matches = []
+	date_matches = []
+	cumulative_livers = []
+	cumulative_bonemarrow = []
+	cumulative_kidney = []
+	sum = 0
 
 	for t in range(DATE_RANGE):
 		while(pd_index < len(toDiscover) and toDiscover[pd_index][0].date == t):
@@ -219,7 +253,16 @@ def unpaired_complex(toDiscover):
 				if isCompatible(patient, donor):
 					pending_donors.remove(donor)
 					isPatientMatched = True
+					if(patient.organClass == "Liver"):
+						liver += 1
+					elif(patient.organClass == "Kidney"):
+						kidney += 1
+					else:
+						bonemarrow += 1
 					matched.append((patient, donor))
+					patient.timeMatched = t
+					sum += (patient.timeMatched - patient.date)
+					matches += 1
 					break
 					#print("Log: ", patient.id, " matched with ", donor.id)
 			#if no match, add patient to pending_patients
@@ -233,7 +276,16 @@ def unpaired_complex(toDiscover):
 				if isCompatible(patient, donor):
 					pending_patients.remove(patient)
 					isDonorMatched = True
+					if(patient.organClass == "Liver"):
+						liver += 1
+					elif(patient.organClass == "Kidney"):
+						kidney += 1
+					else:
+						bonemarrow += 1
 					matched.append((patient, donor))
+					patient.timeMatched = t
+					sum += (patient.timeMatched - patient.date)
+					matches += 1
 					break
 					#print("Log: ", patient.id, " matched with ", donor.id)
 			#if no match, add patient to pending_patients
@@ -241,11 +293,29 @@ def unpaired_complex(toDiscover):
 				pending_donors.append(donor)
 
 			pd_index += 1
+			cumulative_kidney.append(kidney)
+			cumulative_livers.append(liver)
+			cumulative_bonemarrow.append(bonemarrow)
+			cumulative_matches.append(matches)
+			date_matches.append(t)
 			#print(pd_index)
-	print("Unpaired Complex: ")
+
+	plt.figure(num=0, dpi=120)
+	plt.plot()
+	plt.title("Unpaired Trade")
+	plt.plot(date_matches, cumulative_matches, label="All Organs")
+	plt.plot(date_matches, cumulative_kidney, label="Kidneys")
+	plt.plot(date_matches, cumulative_livers, label="Livers")
+	plt.plot(date_matches, cumulative_bonemarrow, label="Bone Marrow")
+	plt.xlabel("Date")
+	plt.ylabel("Cumulative Matches")
+	plt.legend()
+	plt.show()
+	print("Unpaired Complex: ", mode)
 	print("Elapsed Time:", (time.time() - startTime)/60)
 	print("Unmatched:",len(pending_patients))
 	print("Matched:", len(matched))
+	print("Average Wait Time:", sum/len(matched))
 	print("---------------")
 
 
@@ -265,12 +335,13 @@ def generate():
 	blood_probs = [.34, .06, .09, .02, .03, .01, .38, .07]
 	patients = []
 	donors = []
-	pairs = []
-
+	pairs_trade = []
+	pairs_exchange = []
 	# create patients according to distributions defined by parameters
 	for i in range(NUM_PATIENTS):
 		#numpy random choice and manually assign mass values
 		organ_classes = np.random.choice(organs, 2, True, organProbs)
+		uniform_class = np.random.choice(organs, 1, True, [.34, .33, .33])
 		blood_types = np.random.choice(blood, 2, True, blood_probs)
 
 		date = randrange(DATE_RANGE)
@@ -284,28 +355,34 @@ def generate():
 			patient_pra_score = randrange(1,99)
 
 		patient = Patient(date, organ_classes[0], blood_types[0], patient_pra_score, False)
-		donor = Donor(organ_classes[1], blood_types[1], donor_pra_score, i)
+		donor_trade = Donor(uniform_class[0], blood_types[1], donor_pra_score, i)
+		donor_exchange = Donor(organ_classes[0], blood_types[1], donor_pra_score, i)
 
-		patients.append(patient)
-		donors.append(donor)
-		pairs.append((patient, donor))
+
+
+		pairs_trade.append((patient, donor_trade))
+		pairs_exchange.append((patient, donor_exchange))
 
 	#print("patients:", patients)
 	#print("donors:", donors)
 	#print("pairs:", pairs)
 
-	return pairs
+	return pairs_trade, pairs_exchange
 
 # generates patients, then runs each match.
 def main():
 	# date = 0
 	print("Running matches: ")
-	toDiscover = generate()
-	toDiscover.sort(key = lambda x: x[0].date)
+	data_sets = generate()
+	toDiscoverTrade = data_sets[0]
+	toDiscoverExchange = data_sets[1]
+	toDiscoverExchange.sort(key = lambda x: x[0].date)
+	toDiscoverTrade.sort(key = lambda x: x[0].date)
 	# print(toDiscover)
 	#pairedMatch(toDiscover)
-	ttc(toDiscover)
-	unpaired_complex(toDiscover)
+	ttc(toDiscoverExchange, "Exchange")
+	ttc(toDiscoverTrade, "Trade")
+	unpaired_complex(toDiscoverTrade, "Trade")
 
 
 
