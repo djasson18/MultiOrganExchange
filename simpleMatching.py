@@ -9,7 +9,7 @@ import time
 
 
 #GLOBAL PARAMETERS FOR GENERATION:
-NUM_PATIENTS = 45000 #number of patients to generate
+NUM_PATIENTS = 450 #number of patients to generate
 CHANCE_KIDNEY = .5 #chance of needing a kidney vs liver
 CHANCE_LEFT = .5 #chance of being left lobe (or organ type 1)
 LIFETIME_AVG = 365*5 #average lifespan for someone after discovering needed organ
